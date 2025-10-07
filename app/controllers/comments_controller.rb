@@ -6,7 +6,10 @@ class CommentsController < ApplicationController
     @comment = @post.comments.build(comment_params)
     @comment.user = current_user
     if @comment.save
-      redirect_to @post, notice: "Comment was successfully created."
+      respond_to do |format|
+        format.html { redirect_to @post }
+        format.turbo_stream
+      end
     else
       flash[:error] = "Failed to add comment."
       render "posts/show"
@@ -16,7 +19,10 @@ class CommentsController < ApplicationController
   def destroy
     @comment = @post.comments.find(params[:id])
     @comment.destroy
-    redirect_to @post, notice: "Comment was successfully deleted."
+    respond_to do |format|
+      format.html { redirect_to @post }
+      format.turbo_stream { render turbo_stream: turbo_stream.remove(@comment) }
+    end
   end
 
   private

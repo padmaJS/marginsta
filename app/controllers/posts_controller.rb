@@ -4,7 +4,12 @@ class PostsController < ApplicationController
   before_action :authorize_post_owner, only: [:edit, :update, :destroy]
 
   def index
-    @posts = Post.all
+    @pagy, @posts = pagy(Post.order(created_at: :desc), items: 5)
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
   end
 
   def new
@@ -13,12 +18,10 @@ class PostsController < ApplicationController
 
   def create
     @post = current_user.posts.build(post_params)
-    p @post.errors
     if @post.save
       redirect_to root_path, notice: "Post created successfully."
     else
-      flash.now[:alert] = "Failed to create post."
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -32,8 +35,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to post_path(@post), notice: "Post updated successfully."
     else
-      flash.now[:alert] = "Failed to update post."
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

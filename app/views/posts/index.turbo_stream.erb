@@ -1,7 +1,7 @@
-<div id="posts">
+<%= turbo_stream.append :posts do %>
   <%= render @posts, action: :index %>
-</div>
-<% if @pagy.next.present? %>
+<% end %>
+<%= turbo_stream.replace :next_page do %>
   <%= turbo_frame_tag :next_page, src: @pagy.next ? posts_path(page: @pagy.next, format: :turbo_stream) : nil, loading: :lazy do %>
     <% if @pagy.next.present? %>
       Loading...
