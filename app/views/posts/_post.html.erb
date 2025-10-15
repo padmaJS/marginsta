@@ -1,11 +1,16 @@
 <div class="card shadow-sm rounded-4 border-0 mb-4">
-  <div class="card-body p-3">
+  <div class="card-body p-3" style="min-width: 1080px;">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <div class="mb-2">
-        <span class="fw-bold text-primary" style="font-size: 1.1rem;"><%= post.user.user_name %></span>
+        <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+          <%= link_to profile_path(post.user.user_name) do %>
+            <%= profile_avatar_select(post.user, :xs) %>
+            <%= post.user.user_name %>
+          <% end %>
+        </span>
         <span class="text-muted small mx-3">posted <%= time_ago_in_words(post.created_at) %> ago</span>
       </div>
-      <% if action == :show%>
+      <% if action == :show %>
         <div>
           <% if post.user == current_user %>
             <%= link_to "Edit", edit_post_path(post), class: "btn btn-link btn-sm text-decoration-none" %>
@@ -24,6 +29,9 @@
           <%= image_tag post.image.variant(resize_to_limit: [1080,566]), class: "img-fluid rounded-3 border", alt: "Post image" %>
         <% end %>
       </div>
+    <% end %>
+    <%= turbo_frame_tag "like_button_#{post.id}" do %>
+      <%= render "posts/like_button", post: post %>
     <% end %>
     <% if action == :show %>
       <div class="mt-4">

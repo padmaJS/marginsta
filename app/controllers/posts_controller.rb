@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
+  before_action :set_post, except: [:index]
   before_action :authorize_post_owner, only: [:edit, :update, :destroy]
 
   def index
@@ -44,6 +44,11 @@ class PostsController < ApplicationController
     redirect_to root_path, notice: "Post deleted successfully."
   end
 
+  def likers
+    @likers = @post.likes.includes(:user).map(&:user)
+    render layout: false
+  end
+
   private
 
   def post_params
@@ -51,7 +56,10 @@ class PostsController < ApplicationController
   end
 
   def set_post
-    @post = Post.find(params[:id])
+    @post = Post.find(params[:id] || params[:post_id])
+    unless @post
+      redirect_to root_path, alert: "Post not found." and return
+    end
   end
 
   def authorize_post_owner
