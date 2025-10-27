@@ -9,6 +9,12 @@ class Post < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :likers, through: :likes, source: :user
 
+  scope :feed_for, ->(user) {
+    following_ids = user.following.pluck(:id)
+    following_ids << user.id
+    where(user_id: following_ids)
+  }
+
   def liked_by?(user)
     likers.include?(user)
   end

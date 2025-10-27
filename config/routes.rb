@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "follows/follow_user"
-  get "follows/unfollow_user"
   get "profiles/show"
   devise_for :users, controllers: {registrations: "registrations"}
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -15,6 +13,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "posts#index"
+  get :explore, to: "posts#explore", as: :explore
   resources :posts do
     resources :comments
     resources :likes, only: [:create, :destroy]
@@ -25,4 +24,11 @@ Rails.application.routes.draw do
   get ":user_name", to: "profiles#show", as: :profile
   get ":user_name/edit", to: "profiles#edit", as: :edit_profile
   post ":user_name/edit", to: "profiles#update", as: :update_profile
+
+  post ":user_name/follow", to: "follows#follow", as: :follow_user
+  post ":user_name/unfollow", to: "follows#unfollow", as: :unfollow_user
+
+  resources :chats, only: [:show] do
+    resources :messages, only: [:create]
+  end
 end

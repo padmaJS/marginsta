@@ -1,10 +1,21 @@
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post, except: [:index]
+  before_action :set_post, except: [:index, :new, :create]
   before_action :authorize_post_owner, only: [:edit, :update, :destroy]
 
   def index
-    @pagy, @posts = pagy(Post.order(created_at: :desc), items: 5)
+    @pagy, @posts = pagy(
+      Post.feed_for(current_user).order(created_at: :desc), items: 5
+    )
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
+    end
+  end
+
+  def explore
+    @pagy, @posts = pagy(Post.all.order(created_at: :desc), items: 5)
 
     respond_to do |format|
       format.html

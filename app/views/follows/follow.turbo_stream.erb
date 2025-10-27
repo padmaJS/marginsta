@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "follow_button_#{@user.id}" do %>
+  <%= turbo_frame_tag "follow_button_#{@user.id}" do %>
+    <%= link_to "Unfollow", unfollow_user_path(@user.user_name), class: "btn btn-outline-danger btn-sm px-4 fw-bold", data: { turbo_frame: "follow_button_#{@user.id}", turbo_method: :post } %>
+  <% end%>
+<% end %>
