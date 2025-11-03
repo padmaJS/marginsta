@@ -15,6 +15,9 @@
       <div class="d-grid mt-4">
         <%= f.submit "Update Profile", class: "btn btn-primary btn-lg" %>
       </div>
+      <div class="d-grid mt-4">
+        <%= link_to "Cancel", profile_path(@user.user_name), class: "btn btn-secondary btn-lg" %>
+      </div>
     <% end %>
   </div>
 </div>

@@ -37,3 +37,8 @@
 !/app/assets/builds/.keep
 
 /node_modules
+
+# Don't check in installed gems (vendored by `bundle install --path vendor/bundle`)
+/vendor/bundle
+# Optional: cached gem files
+/vendor/cache

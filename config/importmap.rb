@@ -8,3 +8,5 @@ pin_all_from "app/javascript/controllers", under: "controllers"
 pin "bootstrap" # @5.3.8
 pin "@popperjs/core", to: "@popperjs--core.js" # @2.11.8
 pin "bootstrap", to: "bootstrap.bundle.min.js"
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"

@@ -17,6 +17,6 @@ module ApplicationHelper
 
     end
 
-    image_tag(image, class: "rounded-circle border", style: size)
+    image_tag(image, class: "rounded-circle border m-2", style: size)
   end
 end

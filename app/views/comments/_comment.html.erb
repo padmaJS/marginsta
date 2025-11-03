@@ -1,27 +1,42 @@
 <%= turbo_frame_tag comment do%>
   <div class="border rounded-3 p-3 mt-2 bg-light">
-    <div class="d-flex justify-content-between align-items-center">
-      <span class="fw-bold text-primary">
-        <%= link_to profile_path(comment.user.user_name), data: {turbo_frame: "_top"} do %>
-          <%= profile_avatar_select(comment.user, :xs) %>
-          <%= comment.user.user_name %>
-        <% end %>
-      </span>
-      <div>
-        <span class="text-muted small"><%= time_ago_in_words(comment.created_at) %> ago</span>
-        <% if comment.user == current_user %>
-          <div class="btn-group">
-            <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
-              <i class="bi bi-three-dots-vertical"></i>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Edit</a></li>
-              <li><%= link_to "Delete", [post, comment], data: { turbo_method: :delete, turbo_frame: "_top" }, class: "text-danger dropdown-item" %></li>
-            </ul>
+    <div class="container-fluid px-0">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <%= link_to profile_path(comment.user.user_name), data: {turbo_frame: "_top"} do %>
+            <%= profile_avatar_select(comment.user, :xs) %>
+          <% end %>
+        </div>
+        <div class="col ps-0">
+          <div>
+            <%= link_to profile_path(comment.user.user_name), data: {turbo_frame: "_top"}, class: "fw-bold text-decoration-none me-2" do %>
+              <%= comment.user.user_name %>
+            <% end %>
+            <span><%= comment.content %></span>
           </div>
-        <% end%>
+        </div>
+        <!-- Edit/Delete button -->
+        <div class="col-auto text-end">
+          <% if comment.user == current_user %>
+            <div class="btn-group">
+              <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Edit</a></li>
+                <li><%= link_to "Delete", [post, comment], data: { turbo_method: :delete, turbo_frame: "_top" }, class: "text-danger dropdown-item" %></li>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="row mt-1">
+        <div class="col-auto"></div>
+        <div class="col ps-0">
+          <span class="text-muted small"><%= time_ago_in_words(comment.created_at) %> ago</span>
+        </div>
+        <div class="col"></div>
       </div>
     </div>
-    <div class="mt-1"><%= comment.content %></div>
   </div>
 <% end %>

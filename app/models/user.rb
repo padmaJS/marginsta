@@ -18,6 +18,10 @@ class User < ApplicationRecord
   has_many :following_relationships, class_name: "Follow", foreign_key: :follower_id, dependent: :destroy
   has_many :following, through: :following_relationships, source: :following
 
+  has_many :chat_users, dependent: :destroy
+  has_many :chats, through: :chat_users
+  has_many :messages, dependent: :destroy
+
   def follow(id)
     following_relationships.create(following_id: id)
   end

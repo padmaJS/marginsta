@@ -28,7 +28,11 @@ Rails.application.routes.draw do
   post ":user_name/follow", to: "follows#follow", as: :follow_user
   post ":user_name/unfollow", to: "follows#unfollow", as: :unfollow_user
 
-  resources :chats, only: [:show] do
+  get "/chats/inbox", to: "chats#index"
+
+  resources :chats, only: [:show, :create] do
     resources :messages, only: [:create]
   end
+
+  post "/chats/start_with/:user_id", to: "chats#start_with", as: :start_chat_with
 end

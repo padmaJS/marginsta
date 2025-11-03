@@ -2,7 +2,7 @@
   <div class="card shadow-sm rounded-4 border-0 w-100">
     <div class="card-body p-4">
       <h2 class="text-center mb-4 fw-bold" style="font-family: 'Segoe UI', Arial, sans-serif; letter-spacing: 1px;">Log in</h2>
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), data: {turbo: false}) do |f| %>
         <div class="mb-3">
           <%= f.label :email, class: "form-label" %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control rounded-3" %>

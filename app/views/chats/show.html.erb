@@ -1,0 +1,59 @@
+<div class="container-fluid mt-4">
+  <div class="row justify-content-center" style="min-height: 80vh;">
+    <div class="col-12 col-md-11 col-lg-10 d-flex flex-column align-items-center" style="min-width: 320px; max-width: 1100px;">
+      <div class="card w-100 flex-grow-1 d-flex flex-column" style="min-height: 500px; max-height: 85vh;">
+        <!-- Chat Header -->
+        <div class="card-header bg-light d-flex align-items-center" style="gap: 1rem;">
+          <%= link_to chats_inbox_path, class: "btn btn-light border-0 p-0 d-flex align-items-center justify-content-center", style: "width: 38px; height: 38px;" do %>
+            <i class="bi bi-arrow-return-left"></i>
+          <% end %>
+          <%= profile_avatar_select(@chat.other_user(current_user), :xs) %>
+          <div class="flex-grow-1 ms-2">
+            <h6 class="mb-0"><%= @chat.other_user(current_user).user_name %></h6>
+            <small class="text-muted">
+              <span id="online-status-<%= @chat.other_user(current_user).id %>" class="online-status">
+                offline
+              </span>
+            </small>
+          </div>
+        </div>
+        <!-- Messages Area with Typing Indicator Container -->
+        <div class="card-body p-0 flex-grow-1 d-flex flex-column" style="min-height: 0;">
+          <!-- Messages Container -->
+          <div id="chat_<%= @chat.id %>_messages" class="messages-container flex-grow-1 d-flex flex-column gap-1" style="height: 100%; min-height: 0; max-height: calc(60vh - 30px); overflow-y: auto;">
+            <%= render @chat.messages.order(created_at: :asc) %>
+          </div>
+          <!-- Typing Indicator - Fixed Height Container -->
+          <div id="typing-indicator-container" class="d-flex align-items-center" style="height: 30px; padding: 0 1rem;">
+            <span id="typing-indicator-<%= @chat.other_user(current_user).id %>" 
+          class="typing-indicator text-muted" 
+          style="display: none;">
+              typing...
+            </span>
+          </div>
+          <!-- Message Form - Fixed at Bottom -->
+          <div class="card-footer bg-white border-0 pt-2">
+            <%= form_with model: [@chat, @message], 
+                        id: "message-form", 
+                        data: { controller: "message", 
+                                action: "turbo:submit-end->message#resetForm",
+                                message_current_user_id_value: current_user.id,
+                                message_chat_id_value: @chat.id } do |form| %>
+              <div class="input-group">
+                <%= form.text_field :content, 
+                                  class: "form-control rounded-start-pill border-end-0", 
+                                  placeholder: "Type a message...",
+                                  data: { message_target: "input",
+                                          action: "keydown->message#handleTyping keyup->message#handleTyping" } %>
+                <button type="submit" class="btn btn-primary rounded-end-pill px-4 d-flex align-items-center justify-content-center" style="height: 44px;">
+                  <i class="bi bi-send"></i>
+                </button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%= turbo_stream_from @chat %>
