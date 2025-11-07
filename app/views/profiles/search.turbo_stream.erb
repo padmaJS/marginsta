@@ -1,0 +1,3 @@
+<%= turbo_stream.update "search-results" do %>
+  <%= render partial: "profiles/search_results", locals: { users: @users, query: @query } %>
+<% end %>

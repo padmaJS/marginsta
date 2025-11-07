@@ -1,0 +1,42 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal fade show d-block" data-controller="modal" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 shadow border-0">
+        <div class="modal-header border-0 pb-0">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-left-text text-primary" style="font-size: 1.5rem;"></i>
+            <span class="fw-bold">Message Options</span>
+          </div>
+          <%= link_to "", "#", class: "btn-close", data: { controller: "modal", action: "click->modal#close" } %>
+        </div>
+        <div class="modal-body pt-2">
+          <div class="mb-2 text-muted small">
+            <i class="bi bi-clock me-1"></i>
+            Sent: <%= @message.created_at.strftime("%b %d, %Y at %H:%M") %>
+          </div>
+          <div class="border rounded-3 p-3 mb-3 bg-light">
+            <span class="text-dark"><%= @message.content %></span>
+          </div>
+          <!-- Action Buttons -->
+          <div class="d-grid gap-2">
+            <%= button_to "Delete for me", 
+                  chat_delete_for_self_path(@chat, @message),
+                  method: :delete,
+                  class: "btn btn-outline-danger rounded-pill fw-bold",
+                  form: { data: { turbo_confirm: "Delete this message for you only?" } } %>
+            <% if @message.user == current_user %>
+              <%= button_to "Delete for everyone", 
+                  chat_delete_for_all_path(@chat, @message), 
+                  method: :delete,
+                  class: "btn btn-danger rounded-pill fw-bold",
+                  form: { data: { turbo_confirm: "Permanently delete this message for all users?" } } %>
+            <% end %>
+          </div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <%= link_to "Close", "#", class: "btn btn-link text-muted", data: { controller: "modal", action: "click->modal#close" } %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

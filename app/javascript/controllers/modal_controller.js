@@ -9,5 +9,7 @@ export default class extends Controller {
         modal.removeAttribute("src");
 
         modal.removeAttribute("complete");
+
+        this.element.dispatchEvent(new CustomEvent('modal:close', {bubbles: true}))
     }
 }

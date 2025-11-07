@@ -1,7 +1,7 @@
 class ProfilesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user
-  before_action :authorize_owner, except: [:show]
+  before_action :set_user, except: [:search]
+  before_action :authorize_owner, except: [:show, :search]
 
   def show
     @posts = @user.posts.order(created_at: :desc)
@@ -15,6 +15,20 @@ class ProfilesController < ApplicationController
       redirect_to profile_path(params[:user_name]), info: "Profile updated successfully"
     else
       redirect_to profile_path(params[:user_name]), alert: "Something went wrong"
+    end
+  end
+
+  def search
+    @query = params[:query].to_s.strip
+    @users = if @query.present?
+      User.search(@query)
+    else
+      User.none
+    end
+
+    respond_to do |format|
+      format.html
+      format.turbo_stream
     end
   end
 

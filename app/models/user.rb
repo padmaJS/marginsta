@@ -1,4 +1,17 @@
 class User < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope :search_by_username,
+    against: :user_name,
+    using: {
+      tsearch: {
+        prefix: true,
+        any_word: true,
+        dictionary: "english",
+        negation: true
+      }
+    }
+
   validates :user_name, presence: true, uniqueness: true, length: {maximum: 30, minimum: 6}
   has_one_attached :profile_picture
   validate { errors.add(:profile_picture, "must be a valid image") if profile_picture.attached? && !profile_picture.content_type.in?(%w[image/png image/jpg image/jpeg image/webp]) }
@@ -32,5 +45,10 @@ class User < ApplicationRecord
 
   def following?(user)
     following.include?(user)
+  end
+
+  def self.search(query)
+    return none if query.blank?
+    search_by_username(query).limit(4)
   end
 end

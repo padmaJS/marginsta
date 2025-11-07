@@ -9,8 +9,8 @@ class Chat < ApplicationRecord
     users.where.not(id: current_user.id).first
   end
 
-  def last_message
-    messages.order(created_at: :desc).first
+  def last_message(current_user)
+    messages.order(created_at: :desc).select { |message| !(message.removed_for_self && message.removed_for_user_ids.include?(current_user.id)) && !message.removed_for_everyone }.first
   end
 
   def self.between_users(user1, user2)

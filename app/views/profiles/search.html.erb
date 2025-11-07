@@ -1,0 +1,35 @@
+<!-- app/views/users/search.html.erb -->
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal fade show d-block" tabindex="-1" data-controller="modal search-modal" style="background: rgba(0,0,0,0.5);" data-search-modal-url-value="<%= search_profile_path %>">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search Users</h5>
+          <%= link_to "", "#", class: "btn-close", data: { controller: "modal", action: "click->modal#close" } %>
+        </div>
+        <div class="modal-body">
+          <!-- Search Input -->
+          <div class="mb-3">
+            <%= text_field_tag :query, @query, 
+                  class: "form-control",
+                  placeholder: "Type username...",
+                  data: { 
+                    action: "input->search-modal#search",
+                    search_modal_target: "input"
+                  } %>
+          </div>
+          <!-- Loading Indicator -->
+          <div class="text-center d-none" data-search-modal-target="loading">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <!-- Search Results -->
+          <div id="search-results" data-search-modal-target="results">
+            <%= render partial: "search_results", locals: { users: @users, query: @query } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

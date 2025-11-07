@@ -21,17 +21,26 @@ Rails.application.routes.draw do
     get "likers", to: "posts#likers"
   end
 
-  get ":user_name", to: "profiles#show", as: :profile
-  get ":user_name/edit", to: "profiles#edit", as: :edit_profile
-  post ":user_name/edit", to: "profiles#update", as: :update_profile
+  get "/search", to: "profiles#search", as: :search_profile
 
-  post ":user_name/follow", to: "follows#follow", as: :follow_user
-  post ":user_name/unfollow", to: "follows#unfollow", as: :unfollow_user
+  get "@:user_name", to: "profiles#show", as: :profile
+  get "@:user_name/edit", to: "profiles#edit", as: :edit_profile
+  post "@:user_name/edit", to: "profiles#update", as: :update_profile
+
+  post "@:user_name/follow", to: "follows#follow", as: :follow_user
+  post "@:user_name/unfollow", to: "follows#unfollow", as: :unfollow_user
 
   get "/chats/inbox", to: "chats#index"
 
   resources :chats, only: [:show, :create] do
-    resources :messages, only: [:create]
+    resources :messages, only: [:create] do
+      member do
+        get :actions
+      end
+    end
+
+    delete "/messages/:id", to: "messages#delete_for_self", as: :delete_for_self
+    delete "/messages/:id/delete_for_all", to: "messages#delete_for_all", as: :delete_for_all
   end
 
   post "/chats/start_with/:user_id", to: "chats#start_with", as: :start_chat_with

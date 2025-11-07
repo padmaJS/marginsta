@@ -10,6 +10,10 @@ class ChatsController < ApplicationController
   def show
     @chat = Chat.includes(:users, messages: :user).find(params[:id])
 
+    @messages = @chat.messages.order(created_at: :asc).select do |message|
+      !(message.removed_for_self && message.removed_for_user_ids.include?(current_user.id)) && !message.removed_for_everyone
+    end
+
     @message = Message.new
   end
 

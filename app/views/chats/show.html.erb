@@ -21,7 +21,7 @@
         <div class="card-body p-0 flex-grow-1 d-flex flex-column" style="min-height: 0;">
           <!-- Messages Container -->
           <div id="chat_<%= @chat.id %>_messages" class="messages-container flex-grow-1 d-flex flex-column gap-1" style="height: 100%; min-height: 0; max-height: calc(60vh - 30px); overflow-y: auto;">
-            <%= render @chat.messages.order(created_at: :asc) %>
+            <%= render @messages %>
           </div>
           <!-- Typing Indicator - Fixed Height Container -->
           <div id="typing-indicator-container" class="d-flex align-items-center" style="height: 30px; padding: 0 1rem;">

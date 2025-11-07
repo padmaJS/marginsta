@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_28_000003) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_04_073852) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -94,6 +94,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_000003) do
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "removed_for_self", default: false
+    t.boolean "removed_for_everyone", default: false
+    t.integer "removed_for_user_ids", default: [], array: true
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
