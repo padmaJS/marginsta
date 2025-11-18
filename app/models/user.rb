@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :chat_users, dependent: :destroy
   has_many :chats, through: :chat_users
   has_many :messages, dependent: :destroy
+  has_many :ai_nlp_conversations, dependent: :destroy
 
   def follow(id)
     following_relationships.create(following_id: id)

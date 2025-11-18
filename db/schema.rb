@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_073852) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_11_084005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_073852) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "ai_nlp_conversations", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.text "query"
+    t.text "sql_query"
+    t.text "response"
+    t.text "error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_ai_nlp_conversations_on_user_id"
+  end
+
+  create_table "chat_summaries", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.text "content", null: false
+    t.integer "message_count", default: 0
+    t.string "summary_type", default: "last_20_messages"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id", "summary_type"], name: "index_chat_summaries_on_chat_id_and_summary_type"
+    t.index ["chat_id"], name: "index_chat_summaries_on_chat_id"
+  end
+
   create_table "chat_users", force: :cascade do |t|
     t.bigint "chat_id", null: false
     t.bigint "user_id", null: false
@@ -53,7 +75,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_073852) do
   end
 
   create_table "chats", force: :cascade do |t|
-    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -127,6 +148,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_073852) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "ai_nlp_conversations", "users"
+  add_foreign_key "chat_summaries", "chats"
   add_foreign_key "chat_users", "chats"
   add_foreign_key "chat_users", "users"
   add_foreign_key "comments", "posts"

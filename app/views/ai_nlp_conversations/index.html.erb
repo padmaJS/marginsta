@@ -1,0 +1,68 @@
+<div class="container-fluid mt-4" data-controller="ainlp">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="card shadow-sm border-0 rounded-4" style="min-height: 80vh;">
+        <!-- Header -->
+        <div class="card-header bg-primary text-white d-flex align-items-center rounded-top-4 py-3">
+          <div class="flex-grow-1">
+            <h4 class="mb-0">🤖 AI Database Assistant</h4>
+            <small class="opacity-75">Ask questions about your database in natural language</small>
+          </div>
+        </div>
+        <!-- Messages Area -->
+        <div class="card-body p-0 d-flex flex-column" style="height: calc(80vh - 140px);">
+          <div id="conversations" class="flex-grow-1 p-4 overflow-auto" style="background: #f8f9fa;" data-ainlp-target="messageBox">
+            <% if @conversations.any? %>
+              <% @conversations.reverse.each do |conversation| %>
+                <%= render partial: "user_message", locals: { conversation: conversation } %>
+                <% if conversation.success? %>
+                  <%= render partial: "ai_response", locals: { conversation: conversation } %>
+                <% else %>
+                  <%= render partial: "error_response", locals: { conversation: conversation } %>
+                <% end %>
+              <% end %>
+            <% else %>
+              <div class="text-center text-muted py-5">
+                <i class="bi bi-chat-dots" style="font-size: 3rem;"></i>
+                <p class="mt-3">Start a conversation by asking a question about your database!</p>
+                <small class="text-muted">
+                  Examples: "Show me all users", "How many posts were created today?", "List users with most followers"
+                </small>
+              </div>
+            <% end %>
+          </div>
+          <!-- Loading Indicator -->
+          <div id="loading-indicator" class="d-none p-3 bg-light border-top" data-ainlp-target="loading">
+            <div class="d-flex align-items-center gap-2">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <span class="text-muted">AI is processing your query...</span>
+            </div>
+          </div>
+          <!-- Message Form -->
+          <div class="card-footer bg-white border-top p-3">
+            <%= form_with model: @conversation, 
+                          url: ai_nlp_conversations_path,
+                          data: { 
+                            action: "turbo:submit-start->ainlp#showLoading turbo:submit-end->ainlp#hideLoading turbo:submit-end->ainlp#resetForm",
+                            ainlp_target: "form"
+                          } do |form| %>
+              <div class="input-group">
+                <%= form.text_field :query, 
+                                    class: "form-control rounded-start-pill border-end-0", 
+                                    placeholder: "Ask a question about your database...",
+                                    data: { ainlp_target: "input" },
+                                    autocomplete: "off" %>
+                <button type="submit" class="btn btn-primary rounded-end-pill px-4 d-flex align-items-center justify-content-center" style="min-width: 100px;">
+                  <i class="bi bi-send me-2"></i>
+                  Ask
+                </button>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

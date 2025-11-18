@@ -3,6 +3,8 @@ class Chat < ApplicationRecord
   has_many :users, through: :chat_users
   has_many :messages, dependent: :destroy
 
+  has_many :chat_summaries, dependent: :destroy
+
   # validates :title, length: {maximum: 255}, allow_blank: false
 
   def other_user(current_user)
@@ -11,6 +13,19 @@ class Chat < ApplicationRecord
 
   def last_message(current_user)
     messages.order(created_at: :desc).select { |message| !(message.removed_for_self && message.removed_for_user_ids.include?(current_user.id)) && !message.removed_for_everyone }.first
+  end
+
+  def last_n_messages(n = 20)
+    messages.includes(:user).order(created_at: :desc).limit(n).reverse
+  end
+
+  def generate_summary
+    recent_messages = last_n_messages(20)
+    AiSummarizer.summarize_conversation(recent_messages)
+  end
+
+  def generate_summary_async(user_id)
+    SummarizeChatJob.perform_later(id, user_id)
   end
 
   def self.between_users(user1, user2)

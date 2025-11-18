@@ -13,6 +13,10 @@
             data: { turbo_frame: "modal" } do %>
           <i class="fas fa-search"></i> Search Users
         <% end %>
+        <%= link_to ai_nlp_conversations_path, class: "nav-link px-2" do %>
+          <i class="bi bi-robot"></i>
+          <span class="d-none d-md-inline">AI Database</span>
+        <% end %>
         <%= link_to chats_inbox_path, class: "nav-link px-2" do %>
           <i class="bi bi-chat-dots"></i>
           <span class="d-none d-md-inline">Chats</span>

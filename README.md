@@ -86,7 +86,9 @@ export DB_HOST=localhost
 bin/rails db:create db:migrate
 ```
 
-5. Start the dev server:
+5. Get Ollama3.2 from official site
+
+6. Start the dev server:
 
 ```bash
 bin/dev

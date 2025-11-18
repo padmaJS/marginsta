@@ -1,0 +1,28 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal fade show d-block" data-controller="modal" style="background: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 shadow border-0">
+        <div class="modal-header border-0 pb-0">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-chat-left-text text-primary" style="font-size: 1.5rem;"></i>
+            <span class="fw-bold">AI Summaries</span>
+          </div>
+          <%= link_to "", "#", class: "btn-close", data: { controller: "modal", action: "click->modal#close" } %>
+        </div>
+        <!-- Summaries section -->
+        <div class="chat-summaries-section">
+          <%= turbo_frame_tag "summaries_frame" do %>
+            <div id="chat_<%= @chat.id %>_summaries">
+              <% @chat.chat_summaries.recent.each do |summary| %>
+                <%= render partial: "chat_summaries/summary", locals: { summary: summary } %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.dispatchEvent(new CustomEvent('summary:loaded'))
+  </script>
+<% end %>

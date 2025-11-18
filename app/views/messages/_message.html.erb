@@ -4,7 +4,7 @@
      style="max-width: 75%; min-width: 60px;">
   <div class="message-content d-flex align-items-end gap-2">
     <span class="message-text text-break" style="word-break:break-word; white-space:pre-line;"> <%= message.content %> </span>
-    <%= link_to actions_chat_message_path(@chat, message), data: {turbo_frame: "modal"} do %>
+    <%= link_to actions_chat_message_path(message.chat_id, message), data: {turbo_frame: "modal"} do %>
       <i class="bi bi-three-dots-vertical"></i>
     <% end %>
   </div>

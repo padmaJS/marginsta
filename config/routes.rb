@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get "/chats/inbox", to: "chats#index"
 
   resources :chats, only: [:show, :create] do
+    resources :summaries, controller: "chat_summaries", only: [:create, :index]
+
     resources :messages, only: [:create] do
       member do
         get :actions
@@ -44,4 +46,7 @@ Rails.application.routes.draw do
   end
 
   post "/chats/start_with/:user_id", to: "chats#start_with", as: :start_chat_with
+
+  # AI NLP Database Chat
+  resources :ai_nlp_conversations, only: [:index, :create]
 end
