@@ -42,3 +42,7 @@
 /vendor/bundle
 # Optional: cached gem files
 /vendor/cache
+
+# Kamal deployment secrets
+.kamal/secrets
+.kamal/secrets-*

@@ -24,9 +24,9 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[windows jruby]
 
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
-gem "solid_cache"
-gem "solid_queue"
-gem "solid_cable"
+# gem "solid_cache"  # Commented out - using simple adapters
+# gem "solid_queue"  # Commented out - using async adapter for Active Job instead
+# gem "solid_cable"  # Commented out - using async adapter for Action Cable instead
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
